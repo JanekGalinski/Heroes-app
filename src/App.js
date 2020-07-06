@@ -1,43 +1,73 @@
 import React from 'react';
 import axios from "axios";
 import './App.css';
+import { getHeroById } from './requests';
+
+const myHeroesIds = [201, 140, 309]
 
 class App extends React.Component {
   constructor(){
     super();
 
     this.state = {
-      heroes: [],
-      heroeId: '',
-      heroePhoto: '',
+      heroList: [],
     }
 
   }
 
-  getAndRenderHeroe = () => {
-    axios.get('https://superheroapi.com/api/access-token/251').then(resp => {
-      this.setState({heroeId: resp.data});
+  getAndRenderHero = () => {
+    const heroes = [];
+    myHeroesIds.forEach(id => {
+      getHeroById(id).then (response => {
+        heroes.push(response.data)
+      })
     })
-  }
-  getAndRenderHeroePhoto = () => {
-    axios.get('https://superheroapi.com/api/access-token/251/image').then(resp => {
-      this.setState({heroePhoto: resp.data});
-    })
+    
   }
 
-  componentDidMount() {
-    this.getAndRenderHeroe();
-    this.getAndRenderHeroePhoto();
+  componentDidMount = () => {
+    this.getAndRenderHero();
   }
 
   render() {
     return (
-      <main>
+      <div>
         <header>
-         <h1>Heroes</h1>
+         <nav>
+           <div className="container container-nav">
+             <span>My heroes app</span>
+             <form>
+               <input type="text"></input>
+               <button>Search</button>
+             </form>
+           </div>
+         </nav>
         </header>
+        <main>
+          <div className="container"></div>
+            <section className="title">
+              <h1 className="main-title">Heroes</h1>
+            </section>
+            <section className="container-heroes">
+              
+                {
+                  this.state.heroList.map(hero => {
+                    return (
+                      <article className="about-hero" key={hero.id}>
+                        <p className="about-hero-title">{hero.name}</p>
+                        <img className="about-hero-img" src={hero.image.url} alt="hero"></img>
+                      </article>
+                    )
+                  })
+                }
+      
+            </section>
+        </main>
+        <footer>
+
+        </footer>
         
-      </main>
+      </div>
     )
   }
 }
