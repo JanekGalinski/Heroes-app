@@ -14,19 +14,14 @@ class App extends React.Component {
 
   }
 
-  getAndRenderHero = () => {
+  getAndRenderHero = async () => {
     const heroes = [];
-    myHeroesIds.forEach(id => {
-      getHeroById(id).then (response => {
-        heroes.push(response.data)
-      })
-    })
     
-    async function asyncCall() {
-    await myHeroesIds (id => {
-      this.setState({heroList: heroes});
-    }) 
-  }
+    for (const id of myHeroesIds) {
+      const data = await getHeroById(id)
+      heroes.push(data);
+    }
+    this.setState({heroList: heroes});
   }
 
   componentDidMount = () => {
@@ -35,7 +30,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <body>
+      <div className="body">
         <nav>
            <div className="container container-nav">
              <span>My heroes app</span>
@@ -54,7 +49,7 @@ class App extends React.Component {
                 <section className="container-heroes">
                   
                     {
-                      this.state.heroList.map(hero => {
+                      this.state.heroList.map(({data: hero}) => {
                         return (
                           <article className="about-hero" key={hero.id}>
                             <p className="about-hero-title">{hero.name}</p>
@@ -70,7 +65,7 @@ class App extends React.Component {
         </main>
         <footer>
         </footer>
-      </body>
+      </div>
     )
   }
 }
