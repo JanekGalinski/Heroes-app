@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from "axios";
 import './App.css';
 import { getHeroById } from './requests';
 
@@ -23,6 +22,11 @@ class App extends React.Component {
       })
     })
     
+    async function asyncCall() {
+    await myHeroesIds (id => {
+      this.setState({heroList: heroes});
+    }) 
+  }
   }
 
   componentDidMount = () => {
@@ -31,43 +35,42 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <header>
-         <nav>
+      <body>
+        <nav>
            <div className="container container-nav">
              <span>My heroes app</span>
              <form>
-               <input type="text"></input>
-               <button>Search</button>
+               <input className="nav-input" type="text" placeholder="Hero"></input>
+               <button className="nav-button">Search</button>
              </form>
            </div>
-         </nav>
-        </header>
+        </nav>
         <main>
-          <div className="container"></div>
-            <section className="title">
-              <h1 className="main-title">Heroes</h1>
-            </section>
-            <section className="container-heroes">
-              
-                {
-                  this.state.heroList.map(hero => {
-                    return (
-                      <article className="about-hero" key={hero.id}>
-                        <p className="about-hero-title">{hero.name}</p>
-                        <img className="about-hero-img" src={hero.image.url} alt="hero"></img>
-                      </article>
-                    )
-                  })
-                }
-      
-            </section>
+          <div className="landing-page">
+            <div className="container">
+              <section className="title">
+                  <h1 className="main-title">Heroes</h1>
+                </section>
+                <section className="container-heroes">
+                  
+                    {
+                      this.state.heroList.map(hero => {
+                        return (
+                          <article className="about-hero" key={hero.id}>
+                            <p className="about-hero-title">{hero.name}</p>
+                            <img className="about-hero-img" src={hero.image.url} alt="hero"></img>
+                          </article>
+                        )
+                      })
+                    }
+          
+                </section>
+            </div>
+          </div>
         </main>
         <footer>
-
         </footer>
-        
-      </div>
+      </body>
     )
   }
 }
